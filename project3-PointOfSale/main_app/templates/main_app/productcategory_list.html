@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+      <div class="col-12">
+        <div class="card my-4">
+          <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+            <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+              <h6 class="text-white text-capitalize ps-3" style="display:inline">Product Category table</h6>
+              <a href="{% url 'product_categories_create' %}"> <span style="float: right; margin-right: 20px;" class="material-icons">add</span> </a>
+            </div>
+          </div>
+          <div class="card-body px-0 pb-2">
+            <div class="table-responsive p-0">
+              <table class="table align-items-center mb-0">
+                <thead>
+                  <tr>
+                    <th class="text-secondary opacity-7"></th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Product Category ID</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Type</th>
+                  </tr>
+                </thead>
+
+
+                <tbody>
+                {% for object in productcategory_list %}
+                {% load static %}
+                <tr>
+                  <td class="align-middle">
+                    <a href="{% url 'product_categories_detail' object.id %}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                      <span class="material-icons" style="margin-left:10px">visibility</span>
+                    </a>
+                  </td>
+                  <td class="align-middle text-left">
+                    <span class="text-secondary text-xs font-weight-bold" style="margin-left:55px">{{ object.id }}</span>
+                  </td>
+                  <td class="align-middle text-left">
+                    <span class="text-secondary text-xs font-weight-bold">{{ object.type }}</span>
+                  </td>
+                </tr>
+             
+                {% endfor %}
+
+                  
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div id="pagination-div">
+          {% if page_obj.has_previous %}
+          {% endif %}
+          <nav aria-label="Page navigation">
+            <ul class="pagination">
+              {% if page_obj.has_previous %}
+              <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&#8249;</a></li>
+              {% else %}
+              <li class="page-item"><a class="page-link">&#8249;</a></li>
+              {% endif %}
+              
+              {% for i in page_obj.paginator.page_range %}
+              {% if page_obj.number == i %}
+              <li class="page-item"><a class="page-link" href="#">{{ i }}</a></li>
+              {% else %}
+              <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+              {% endif %}
+              {% endfor %}
+  
+              {% if page_obj.has_next %}
+              <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">&#8250;</a></li>
+              {% else %}
+              <li class="page-item"><a class="page-link" href="#">&#8250;</a></li>
+              {% endif %}
+            </ul>
+          </nav>
+        </div>
+
+      </div>
+    </div>
+{% endblock %}

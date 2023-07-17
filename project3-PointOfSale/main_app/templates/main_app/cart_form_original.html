@@ -1,0 +1,54 @@
+{% extends 'base.html' %} 
+
+{% block content %} 
+
+<div class="container my-auto">
+  <div class="row">
+    <div class="col-lg-4 col-md-8 col-12 mx-auto">
+      <div class="card z-index-0 fadeIn3 fadeInBottom">
+        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+          <div class="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1">
+        {% if object %}
+            <h4 class="text-white font-weight-bolder text-center mt-2 mb-0">Edit Cart <span class="teal-text">{{ object.id }}</span></h4>
+        {% else %}
+            <h4 class="text-white font-weight-bolder text-center mt-2 mb-0">Add Cart</h4>
+        {% endif %}
+          </div>
+        </div>
+
+
+        <div class="card-body">
+
+          <form action="{% url 'carts_index' %}" method="post" role="form" class="text-start">
+              {% csrf_token %}
+              <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+            <div class="input-group input-group-outline mb-3">  
+                {{ form.customer }}
+            </div>
+
+            <div class="form-check form-switch d-flex align-items-center mb-3">
+                <input class="form-check-input" name="is_closed" type="checkbox" id="cart_is_closed">
+                <label class="form-check-label mb-0 ms-3" for="cart_is_closed">Is Closed</label>
+            </div>
+
+            <div class="text-center">
+                <input type="submit" value="Submit" class="btn bg-gradient-primary w-100 my-4 mb-2">
+            </div>
+          
+          </form>
+      
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let customerElement = document.getElementById('id_customer');
+  customerElement.classList.add("selectpicker");
+  customerElement.classList.add("form-control");
+  customerElement.setAttribute("data-style", "btn btn-link");
+</script>
+
+{% endblock %}

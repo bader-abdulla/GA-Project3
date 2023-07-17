@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+<div class="row">
+    <div class="col-md-12 mt-4">
+      <div class="card">
+        <div class="card-header pb-0 px-3">
+          {% if object %}
+          <h6 class="mb-0">Edit Cart ID:<span class="teal-text">{{ object.id }}</span></h6>
+
+          {% else %}
+          <h6 class="mb-0">Add Cart</h6>
+          {% endif %}
+        </div>
+        <div class="card-body pt-4 p-3">
+
+
+<div class="list-group">
+
+              <form class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg" action="" method="post" role="form" class="text-start">
+                {% csrf_token %}
+                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+    
+                
+                <div class="d-flex flex-column">
+                  <div class="input-group input-group-outline my-3">
+                <label for="id_customer" class="form-label">Customer</label>
+    
+                 {{ form.customer }}
+                  
+                  </div>
+    
+              </div>
+              <div class="ms-auto text-end">
+                <Button type="submit" class="btn btn-link text-danger text-gradient px-3 mb-0"><i class="material-icons text-sm me-2">save</i>Save</Button>
+              </div>
+            
+            </form>
+  
+          </div>     
+     
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+  
+
+    let customerElement = document.getElementById('id_customer');
+    customerElement.classList.add("selectpicker");
+    customerElement.classList.add("form-control");
+    customerElement.setAttribute("data-style", "btn btn-link");
+    
+    
+    </script>
+  {% endblock %}

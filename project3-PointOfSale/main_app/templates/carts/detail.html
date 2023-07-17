@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+<div class="row">
+    <div class="col-md-12 mt-4">
+      <div class="card">
+        <div class="card-header pb-0 px-3">
+          <h6 class="mb-0">Cart Details</h6>
+        </div>
+        <div class="card-body pt-4 p-3">
+          <ul class="list-group">
+            <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
+
+                <div class="d-flex flex-column">
+                <h6 class="mb-3 text-sm">Cart ID: <span class="text-dark font-weight-bold ms-sm-2">{{ cart.id }}</span></h6>
+
+                <span class="mb-2 text-xs">Cart Date: <span class="text-dark font-weight-bold ms-sm-2">{{ cart.cart_date }}</span></span>
+                <span class="mb-2 text-xs">Customer: <span class="text-dark ms-sm-2 font-weight-bold">{{ cart.customer }}</span></span>
+                <span class="mb-2 text-xs">User: <span class="text-dark ms-sm-2 font-weight-bold">{{ cart.user }}</span></span>
+                <span class="mb-2 text-xs">Is Closed: <span class="text-dark ms-sm-2 font-weight-bold">{{ cart.is_closed }}</span></span>
+              </div>
+
+              <div class="ms-auto text-end">
+                <a class="btn btn-link text-danger text-gradient px-3 mb-0" href="{% url 'carts_delete' cart.id %}"><i class="material-icons text-sm me-2">delete</i>Delete</a>
+                <a class="btn btn-link text-dark px-3 mb-0" href="{% url 'carts_update' cart.id %}"><i class="material-icons text-sm me-2">edit</i>Edit</a>
+              
+              </div>
+
+            </li>
+          </ul>
+          <div class="list-group">
+
+            <form class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg" action="{% url 'add_cartItem' cart.id %}" method="post" role="form" class="text-start">
+              {% csrf_token %}
+ 
+              
+              <div class="d-flex flex-column">
+                <div class="input-group input-group-outline my-3">
+              <label for="id_product" class="form-label">Product</label>
+  
+               {{ cartItem_form.product }}
+                {{ cartItem_form.product.image }}
+                </div>
+                <div class="input-group input-group-outline my-3">
+                  <label for="id_quantity" class="form-label">Quantity</label>
+      
+                   {{ cartItem_form.quantity }}
+                    
+                    </div>
+  
+            </div>
+            <div class="ms-auto text-end">
+              <Button type="submit" class="btn btn-link text-danger text-gradient px-3 mb-0"><i class="material-icons text-sm me-2">save</i>Save</Button>
+            </div>
+          
+          </form>
+
+        </div> 
+        
+
+      </div>
+    </div>
+  </div>
+  
+  <!-- start of table -->
+  <div class="container-fluid py-4">
+    <div class="row">
+      <div class="col-12">
+        <div class="card my-4">
+          <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+            <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+              <h6 class="text-white text-capitalize ps-3">Cart Items</h6>
+
+                <!-- <span style="float: right; margin-right: 20px;" class="material-icons">person_add</span> -->
+
+              
+            </div>
+          </div>
+
+          {{ cart.cartItem_set.all }}
+       
+          <div class="card-body px-0 pb-2">
+            <div class="table-responsive p-0">
+              <table class="table align-items-center mb-0">
+                <thead>
+                  <tr>
+
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Product ID</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Taxable</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Price</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Quantity</th>
+                    <!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Quantity</th>
+                    <th class="text-secondary opacity-7"></th> -->
+
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Product and ID</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Taxable</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Price</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Quantity</th>
+                    <!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Quantity</th> -->
+                    <th class="text-secondary opacity-7"></th>
+                  </tr>
+                </thead>
+
+
+                <tbody>
+                {% for cartItem in cartItems %}
+             
+                  <tr>
+                    <td>
+                      <div class="d-flex px-2 py-1">
+                        {% if cartItem.product.image|length > 0 %}
+                        <div>
+                          <img src="{% static cartItem.product.image.url %}" class="avatar avatar-sm me-3 border-radius-lg" alt="product">
+                        </div>
+                        {% else %}
+                        <div>
+                            <img src="{% static 'images/product/logo.png' %}" class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
+                          </div>
+                        {% endif %}
+                        <div class="d-flex flex-column justify-content-center">
+                          <h6 class="mb-0 text-sm">{{ cartItem.product.id }}</h6>
+                          <p class="text-xs text-secondary mb-0">{{ cartItem.product.name }}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <p class="text-xs font-weight-bold mb-0">{{ cartItem.product.is_taxable }}</p>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      <span>{{ cartItem.product.price }}</span>
+                    </td>
+                    <td class="align-middle text-center">
+                      <span class="text-secondary text-xs font-weight-bold">{{ cartItem.quantity }}</span>
+                    </td>
+                    <!-- <td class="align-middle">
+                      <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                        <span class="material-icons">visibility</span>
+                      </a>
+                    </td> -->
+                  </tr>
+                  {% endfor %}
+
+                  
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="list-group">
+
+          <form class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg" action="{% url 'add_order' cart.id %}" method="post" role="form" class="text-start">
+            {% csrf_token %}
+
+            
+            <div class="d-flex flex-column">
+  
+              <div class="input-group input-group-outline my-3">
+    
+                {{ order_form.payment_type }}
+                  </div>
+                
+
+          </div>
+          <div class="ms-auto text-end">
+            <Button type="submit" class="btn btn-link text-danger text-gradient px-3 mb-0"><i class="material-icons text-sm me-2">save</i>Payment Confirm</Button>
+          </div>
+        
+        </form>
+
+      </div>
+      </div>
+    </div>
+  </div>
+  <!-- end of table -->
+ 
+
+  <script>
+  
+
+    let productElement = document.getElementById('id_product');
+    productElement.classList.add("selectpicker");
+    productElement.classList.add("form-control");
+    productElement.setAttribute("data-style", "btn btn-link");
+    let quantityElement = document.getElementById('id_quantity');
+    quantityElement.classList.add("form-control");
+
+    let payementTypeElement = document.getElementById('id_payment_type');
+    payementTypeElement.classList.add("selectpicker");
+    payementTypeElement.classList.add("form-control");
+    payementTypeElement.setAttribute("data-style", "btn btn-link");
+    
+    </script>
+
+  {% endblock %}
